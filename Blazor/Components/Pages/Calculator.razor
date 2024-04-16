@@ -1,0 +1,52 @@
+﻿@page "/calculator"
+
+<h1>Simple Calculator</h1>
+
+<input type="number" @bind-value="num1" />
+<select @bind="operators">
+    <option value="add">+</option>
+    <option value="subtract">-</option>
+    <option value="multiply">*</option>
+    <option value="divide">/</option>
+</select>
+<input type="number" @bind-value="num2" />
+
+<button @onclick="Calculate">=</button>
+
+<p>Result: @result</p>
+
+@code {
+    private double num1;
+    private double num2;
+    private string operators;
+    private double result;
+
+    private void Calculate()
+    {
+        switch (operators)
+        {
+            case "add":
+                result = num1 + num2;
+                break;
+            case "subtract":
+                result = num1 - num2;
+                break;
+            case "multiply":
+                result = num1 * num2;
+                break;
+            case "divide":
+                if (num2 != 0)
+                {
+                    result = num1 / num2;
+                }
+                else
+                {
+                    result = double.NaN;
+                }
+                break;
+            default:
+                result = double.NaN;
+                break;
+        }
+    }
+}

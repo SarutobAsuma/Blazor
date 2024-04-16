@@ -1,0 +1,34 @@
+﻿@page "/Todo"
+@using System.Collections.Generic
+
+@code {
+    List<ToDoItem> todos = new List <ToDoItem>
+    {
+new ToDoItem { Title = "Купить магазин", IsCompleted = false },
+new ToDoItem { Title = "Почистить небо", IsCompleted = true },
+new ToDoItem { Title = "Помочь забор украсть", IsCompleted = false }
+};
+
+    
+string newTodoTitle;
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodoTitle))
+        {
+            todos.Add(new ToDoItem { Title = newTodoTitle, IsCompleted = false });
+            newTodoTitle = string.Empty;
+        }
+    }
+
+    private void MarkAsCompleted(ToDoItem todo)
+    {
+        todo.IsCompleted = true;
+    }
+
+    public class ToDoItem
+    {
+        public string Title { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+}
