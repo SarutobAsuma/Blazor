@@ -1,0 +1,25 @@
+﻿@page "/API"
+@inject HttpClient Http
+
+<h1>Random Evil Generator</h1>
+
+<button @onclick="GenerateInsultAsync">Generate Insult</button>
+
+<p>@EvilText</p>
+
+@code {
+    private string EvilText = "";
+
+    private async Task GenerateInsultAsync()
+    {
+        await GenerateInsult();
+    }
+
+    private async Task GenerateInsult()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://evilinsult.com/generate_insult.php?lang=ru&type=text");
+        request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+        var response = await Http.SendAsync(request);
+        EvilText = await response.Content.ReadAsStringAsync();
+    }
+}

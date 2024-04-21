@@ -1,32 +1,60 @@
-﻿@page "/Todo"
+﻿@page "/spisok"
 @using System.Collections.Generic
+@using Microsoft.AspNetCore.Components.Forms
+
+<h1>To-Do List</h1>
+
+<EditForm Model="@newTodo" OnValidSubmit="@AddTodo">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText id="todoTitle" @bind-Value="@newTodo.Title" placeholder="Add a new to-do." />
+    <button type="submit">Add</button>
+</EditForm>
+
+<table>
+    <thead>
+        <tr>
+            <th>Delo</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var todo in Todos)
+        {
+            <tr>
+                <td>@todo.Title</td>
+                <td>
+                    <label>
+                        <input type="checkbox" @bind="todo.IsCompleted" />
+                    </label>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
-    List<ToDoItem> todos = new List <ToDoItem>
+    public List<ToDo> Todos = new List<ToDo>
     {
-new ToDoItem { Title = "Купить магазин", IsCompleted = false },
-new ToDoItem { Title = "Почистить небо", IsCompleted = true },
-new ToDoItem { Title = "Помочь забор украсть", IsCompleted = false }
-};
+        new ToDo { Title = "Купить магазин", IsCompleted = false },
+        new ToDo { Title = "Почистить небо", IsCompleted = true },
+        new ToDo { Title = "Помочь забор украсть", IsCompleted = false }
+    };
 
-    
-string newTodoTitle;
+    public ToDo newTodo = new ToDo();
 
-    private void AddTodo()
+    public void AddTodo()
     {
-        if (!string.IsNullOrWhiteSpace(newTodoTitle))
-        {
-            todos.Add(new ToDoItem { Title = newTodoTitle, IsCompleted = false });
-            newTodoTitle = string.Empty;
-        }
+        Todos.Add(newTodo);
+        newTodo = new ToDo();
     }
 
-    private void MarkAsCompleted(ToDoItem todo)
+    public void Completed(ToDo todo)
     {
         todo.IsCompleted = true;
     }
 
-    public class ToDoItem
+    public class ToDo
     {
         public string Title { get; set; }
         public bool IsCompleted { get; set; }
